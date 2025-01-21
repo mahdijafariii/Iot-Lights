@@ -1,29 +1,22 @@
+import asyncio
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
-import threading
+from telegram.ext import Application, CommandHandler, MessageHandler, CallbackContext, filters
 
 class Bot:
-    def __init__(self, token):
+    def __init__(self, token, message_queue):
         self.token = token
+        self.message_queue = message_queue
         self.user_message = ""
-        self.update = ""
 
     async def start(self, update: Update, context: CallbackContext) -> None:
         await update.message.reply_text("این بات جهت کار با یکسری دستورات کنترلی آماده ساخته شده! خوش آمدید 💓")
 
     async def handle_user_message(self, update: Update, context: CallbackContext) -> None:
-        user_message = update.message.text
+        self.user_message = update.message.text
         await update.message.reply_text("درخواست شما با موفقیت ارسال شد✅")
         await update.message.reply_text("منتظر دریافت پاسخ از AI هستم...🔍")
-        self.user_message = user_message
-        self.update = update
 
-        thread = threading.Thread(target=self.handle_message_in_background)
-        thread.start()
-
-    def handle_message_in_background(self):
-        return(self.user_message)
-
+        self.message_queue.put(self.user_message)
 
     def run(self):
         application = Application.builder().token(self.token).build()
