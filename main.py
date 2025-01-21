@@ -2,13 +2,19 @@ import asyncio
 import threading
 import queue
 from Bot import Bot
+from Ai import Ai
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 def bot_thread(message_queue):
     new_loop = asyncio.new_event_loop()
     asyncio.set_event_loop(new_loop)
 
-    bot = Bot("7906117866:AAFVuWuO0oU1tyAYPwWEEcN7W-3dsJhVq2k", message_queue)
+    bot = Bot(BOT_TOKEN, message_queue)
     new_loop.run_until_complete(bot.run())
 
 
@@ -21,6 +27,8 @@ def main():
         if not message_queue.empty():
             user_message = message_queue.get()
             print(user_message)
+            response = Ai().handle_request(user_message)
+            print(response)
 
 
 if __name__ == "__main__":
