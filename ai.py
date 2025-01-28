@@ -13,8 +13,8 @@ class Ai:
         B: turning off the light number 1,
         C: turning on the light number 2,
         D: turning off the light number 2,
-        E: turning on the light number 3,
-        F: turning off the light number 3.
+        E: turning on the light number 1 AND  turn off light number 2,
+        F: turning on the light number 2 AND  turn off light number 1,
         You must only respond with a single character (A, B, C, D, E, or F)
         corresponding to the function. DO NOT add any other information or
         text.""",
